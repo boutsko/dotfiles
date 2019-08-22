@@ -1,0 +1,13 @@
+shell "/bin/zsh"
+
+term xterm-xfree86
+
+screen -t foo
+select 1
+
+hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B} %d/%m %{W}%c %{g}]'
+
+hardstatus alwayslastline
+
+shelltitle "$ |zsh"
+
