@@ -1,3 +1,8 @@
+
+if filereadable(expand("~/.vimrc.plug"))
+    source ~/.vimrc.plug
+endif
+
 set nocompatible              " required
 filetype off                  " required
 
@@ -63,14 +68,14 @@ let g:ycm_autoclose_preview_window_after_completion=1
 map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 "python with virtualenv support
-py << EOF
-import os
-import sys
-if 'VIRTUAL_ENV' in os.environ:
-  project_base_dir = os.environ['VIRTUAL_ENV']
-  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
-  execfile(activate_this, dict(__file__=activate_this))
-EOF
+"py << EOF
+"import os
+"import sys
+"if 'VIRTUAL_ENV' in os.environ:
+"  project_base_dir = os.environ['VIRTUAL_ENV']
+"  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+"  execfile(activate_this, dict(__file__=activate_this))
+"EOF
 
 
 Plugin 'vim-syntastic/syntastic'
@@ -84,14 +89,15 @@ syntax on
 Plugin 'jnurmine/Zenburn'
 Plugin 'altercation/vim-colors-solarized'
 
-if has('gui_running')
-  set background=dark
-  colorscheme solarized
-else
-  colorscheme zenburn
-endif
+"if has('gui_running')
+"  set background=dark
+"  colorscheme solarized
+"else
+"  "colorscheme zenburn
+"  colorscheme solarized
+"endif
 
-call togglebg#map("<F5>")
+"call togglebg#map("<F5>")
 
 "Plugin 'kien/ctrlp.vim'
 
@@ -102,3 +108,45 @@ Plugin 'tpope/vim-fugitive'
 "Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 
 set clipboard=unnamed
+
+
+" Tweaks for browsing
+let g:netrw_banner=0
+let g:netrw_browse_split=4
+let g:netrw_altv=1
+let g:netrw_liststyle=3
+let g:netrw_list_hide=netrw_gitignore#Hide()
+let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
+
+" Snippets:
+
+" Read an empy html template and move cursor to title
+nnoremap ,html :-1read $HOME/todo/skeleton.html<CR>3jwf>a
+
+"set makeprg=env/bin/python\ -mpytest\ tests.py
+
+nmap <leader>r :make <CR>
+"nmap <leader>r :!ls <CR>
+nmap <leader>v :source ~/.vimrc<CR>
+
+"set makeprg=pytest\ --tb=short\ -vv\ $*
+"set makeprg=env/bin/python\ -mpytest\ --tb=short\ -vv\ $*
+"set makeprg=env/bin/python\ -mpytest\ --tb=short\ -vv\ %
+set makeprg=env/bin/python\ -mpytest\ --vim-quickfix\ %
+
+set errorformat=
+      \%EE\ \ \ \ \ File\ \"%f\"\\,\ line\ %l,
+      \%CE\ \ \ %p^,
+      \%ZE\ \ \ %[%^\ ]%\\@=%m,
+      \%Afile\ %f\\,\ line\ %l,
+      \%+ZE\ %mnot\ found,
+      \%CE\ %.%#,
+      \%-G_%\\+\ ERROR%.%#\ _%\\+,
+      \%A_%\\+\ %o\ _%\\+,
+      \%C%f:%l:\ in\ %o,
+      \%ZE\ %\\{3}%m,
+      \%EImportError%.%#\'%f\'\.,
+      \%C%.%#,
+      \%+G%[=]%\\+\ %*\\d\ passed%.%#,
+      \%-G%[%^E]%.%#,
+      \%-G
